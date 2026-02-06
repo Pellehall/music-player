@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Music Platform</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
 </head>
 <body>
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <h1 class="logo">Music</h1>
     <nav>
-      <button data-view="home">Start</button>
+      <button data-view="home" class="active">Start</button>
       <button data-view="search">Sök</button>
       <button data-view="library">Bibliotek</button>
     </nav>
@@ -35,7 +34,9 @@
     <!-- BIBLIOTEK -->
     <section id="library" class="view">
       <h2>Ditt bibliotek</h2>
-      <div class="list" id="libraryContent"></div>
+      <div class="list" id="libraryContent">
+        <p>Sparade låtar kommer visas här.</p>
+      </div>
     </section>
   </main>
 
