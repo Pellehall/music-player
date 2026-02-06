@@ -1,0 +1,74 @@
+:root {
+  --bg: #0f0f0f;
+  --surface: #181818;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --accent: #1db954;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+.sidebar {
+  width: 220px;
+  background: var(--surface);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar nav button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.75rem 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.sidebar nav button:hover {
+  color: var(--text-primary);
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.card {
+  background: var(--surface);
+  padding: 1rem;
+  border-radius: 8px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  background: #202020;
+}
