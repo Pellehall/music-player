@@ -1,12 +1,16 @@
-// Navigation (hierarkisk + kontextuell)
-document.querySelectorAll("nav button").forEach(btn => {
+// NAVIGATION
+const buttons = document.querySelectorAll(".sidebar nav button");
+buttons.forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById(btn.dataset.view).classList.add("active");
+
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
   });
 });
 
-// Apple Music / MusicKit
+// MusicKit Init (lägg in din developer token här)
 document.addEventListener("musickitloaded", async () => {
   const music = MusicKit.configure({
     developerToken: "DIN_DEVELOPER_TOKEN_HÄR",
@@ -18,42 +22,63 @@ document.addEventListener("musickitloaded", async () => {
 
   await music.authorize();
 
-  // Rekommendationer (personalisering)
-  const recommendations = await music.api.music(
-    "v1/me/recommendations"
-  );
+  // Ladda rekommendationer
+  loadRecommendations(music);
 
-  const container = document.getElementById("recommendations");
+  // Sök
+  const searchInput = document.getElementById("searchInput");
+  searchInput.addEventListener("input", async e => {
+    const query = e.target.value;
+    if (query.length < 2) return;
 
-  recommendations.data[0].relationships.contents.data.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <strong>${item.attributes.name}</strong>
-      <p>${item.attributes.curatorName || ""}</p>
-    `;
-    container.appendChild(card);
+    const results = await music.api.search(query, { types: ["songs", "albums"], limit: 8 });
+    displaySearchResults(results);
   });
 });
 
-// Sök (dynamiskt, adaptivt UI)
-document.getElementById("searchInput").addEventListener("input", async e => {
-  const query = e.target.value;
-  if (query.length < 2) return;
+// RENDER REKOMMENDATIONER
+function loadRecommendations(music) {
+  // TODO: Anropa MusicKit API för rekommendationer
+  // Temporär dummy-data för layout:
+  const recommendations = [
+    { name: "Album 1", artist: "Artist A", image: "https://via.placeholder.com/150" },
+    { name: "Album 2", artist: "Artist B", image: "https://via.placeholder.com/150" },
+    { name: "Album 3", artist: "Artist C", image: "https://via.placeholder.com/150" },
+    { name: "Album 4", artist: "Artist D", image: "https://via.placeholder.com/150" }
+  ];
 
-  const music = MusicKit.getInstance();
-  const results = await music.api.search(query, {
-    types: ["songs", "albums"],
-    limit: 8
+  const container = document.getElementById("recommendations");
+  container.innerHTML = "";
+  recommendations.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${item.image}" alt="${item.name}">
+      <div class="title">${item.name}</div>
+      <div class="subtitle">${item.artist}</div>
+      <div class="play-btn">▶</div>
+    `;
+    container.appendChild(card);
   });
+}
 
-  const grid = document.getElementById("searchResults");
-  grid.innerHTML = "";
+// RENDER SÖKRESULTAT
+function displaySearchResults(results) {
+  const container = document.getElementById("searchResults");
+  container.innerHTML = "";
+
+  // Dummy om inget finns än
+  if (!results.songs) return;
 
   results.songs.data.forEach(song => {
     const card = document.createElement("div");
     card.className = "card";
-    card.textContent = song.attributes.name;
-    grid.appendChild(card);
+    card.innerHTML = `
+      <img src="${song.attributes.artwork.url.replace("{w}x{h}bb.jpg", "150x150bb.jpg")}" alt="${song.attributes.name}">
+      <div class="title">${song.attributes.name}</div>
+      <div class="subtitle">${song.attributes.artistName}</div>
+      <div class="play-btn">▶</div>
+    `;
+    container.appendChild(card);
   });
-});
+}
