@@ -2,12 +2,11 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Music Platform</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <h1 class="logo">Music</h1>
     <nav>
@@ -17,21 +16,17 @@
     </nav>
   </aside>
 
-  <!-- HUVUDVY -->
   <main id="app">
-    <!-- REKOMMENDATIONER -->
     <section id="home" class="view active">
       <h2>Rekommenderat för dig</h2>
       <div class="card-grid" id="recommendations"></div>
     </section>
 
-    <!-- SÖK -->
     <section id="search" class="view">
       <input type="text" id="searchInput" placeholder="Sök efter musik…" />
       <div class="card-grid" id="searchResults"></div>
     </section>
 
-    <!-- BIBLIOTEK -->
     <section id="library" class="view">
       <h2>Ditt bibliotek</h2>
       <div class="list" id="libraryContent">
