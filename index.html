@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Platform</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://js-cdn.music.apple.com/musickit/v1/musickit.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <h1 class="logo">Music</h1>
+    <nav>
+      <button data-view="home">Start</button>
+      <button data-view="search">Sök</button>
+      <button data-view="library">Bibliotek</button>
+    </nav>
+  </aside>
+
+  <main id="app">
+    <section id="home" class="view active">
+      <h2>Rekommenderat för dig</h2>
+      <div class="card-grid" id="recommendations"></div>
+    </section>
+
+    <section id="search" class="view">
+      <input type="text" id="searchInput" placeholder="Sök efter musik…" />
+      <div class="card-grid" id="searchResults"></div>
+    </section>
+
+    <section id="library" class="view">
+      <h2>Ditt bibliotek</h2>
+      <div class="list" id="libraryContent"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
