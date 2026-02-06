@@ -10,75 +10,47 @@ buttons.forEach(btn => {
   });
 });
 
-// MusicKit Init (lägg in din developer token här)
-document.addEventListener("musickitloaded", async () => {
-  const music = MusicKit.configure({
-    developerToken: "DIN_DEVELOPER_TOKEN_HÄR",
-    app: {
-      name: "Music Platform",
-      build: "1.0.0"
-    }
-  });
+// REKOMMENDATIONER (dummy-data som start)
+const recommendations = [
+  { name: "Album 1", artist: "Artist A", image: "https://via.placeholder.com/150" },
+  { name: "Album 2", artist: "Artist B", image: "https://via.placeholder.com/150" },
+  { name: "Album 3", artist: "Artist C", image: "https://via.placeholder.com/150" },
+  { name: "Album 4", artist: "Artist D", image: "https://via.placeholder.com/150" }
+];
 
-  await music.authorize();
-
-  // Ladda rekommendationer
-  loadRecommendations(music);
-
-  // Sök
-  const searchInput = document.getElementById("searchInput");
-  searchInput.addEventListener("input", async e => {
-    const query = e.target.value;
-    if (query.length < 2) return;
-
-    const results = await music.api.search(query, { types: ["songs", "albums"], limit: 8 });
-    displaySearchResults(results);
-  });
+const recContainer = document.getElementById("recommendations");
+recommendations.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <img src="${item.image}" alt="${item.name}">
+    <div class="title">${item.name}</div>
+    <div class="subtitle">${item.artist}</div>
+    <div class="play-btn">▶</div>
+  `;
+  recContainer.appendChild(card);
 });
 
-// RENDER REKOMMENDATIONER
-function loadRecommendations(music) {
-  // TODO: Anropa MusicKit API för rekommendationer
-  // Temporär dummy-data för layout:
-  const recommendations = [
-    { name: "Album 1", artist: "Artist A", image: "https://via.placeholder.com/150" },
-    { name: "Album 2", artist: "Artist B", image: "https://via.placeholder.com/150" },
-    { name: "Album 3", artist: "Artist C", image: "https://via.placeholder.com/150" },
-    { name: "Album 4", artist: "Artist D", image: "https://via.placeholder.com/150" }
-  ];
+// SÖK MED iTunes API
+document.getElementById("searchInput").addEventListener("input", async e => {
+  const query = e.target.value;
+  if (query.length < 2) return;
 
-  const container = document.getElementById("recommendations");
-  container.innerHTML = "";
-  recommendations.forEach(item => {
+  const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=album,song&limit=12`);
+  const data = await response.json();
+
+  const grid = document.getElementById("searchResults");
+  grid.innerHTML = "";
+
+  data.results.forEach(item => {
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
-      <img src="${item.image}" alt="${item.name}">
-      <div class="title">${item.name}</div>
-      <div class="subtitle">${item.artist}</div>
+      <img src="${item.artworkUrl100.replace("100x100", "200x200")}" alt="${item.collectionName || item.trackName}">
+      <div class="title">${item.collectionName || item.trackName}</div>
+      <div class="subtitle">${item.artistName}</div>
       <div class="play-btn">▶</div>
     `;
-    container.appendChild(card);
+    grid.appendChild(card);
   });
-}
-
-// RENDER SÖKRESULTAT
-function displaySearchResults(results) {
-  const container = document.getElementById("searchResults");
-  container.innerHTML = "";
-
-  // Dummy om inget finns än
-  if (!results.songs) return;
-
-  results.songs.data.forEach(song => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <img src="${song.attributes.artwork.url.replace("{w}x{h}bb.jpg", "150x150bb.jpg")}" alt="${song.attributes.name}">
-      <div class="title">${song.attributes.name}</div>
-      <div class="subtitle">${song.attributes.artistName}</div>
-      <div class="play-btn">▶</div>
-    `;
-    container.appendChild(card);
-  });
-}
+});
