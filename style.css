@@ -1,5 +1,5 @@
 :root {
-  --bg: #0f0f0f;
+  --bg: #121212;
   --surface: #181818;
   --text-primary: #ffffff;
   --text-secondary: #b3b3b3;
@@ -16,6 +16,7 @@ body {
   display: flex;
   background: var(--bg);
   color: var(--text-primary);
+  height: 100vh;
 }
 
 .sidebar {
@@ -26,6 +27,12 @@ body {
   flex-direction: column;
 }
 
+.sidebar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
 .sidebar nav button {
   background: none;
   border: none;
@@ -34,9 +41,11 @@ body {
   text-align: left;
   cursor: pointer;
   transition: color 0.2s ease;
+  font-size: 1rem;
 }
 
-.sidebar nav button:hover {
+.sidebar nav button:hover,
+.sidebar nav button.active {
   color: var(--text-primary);
 }
 
@@ -57,18 +66,67 @@ main {
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 1.25rem;
+  gap: 1rem;
   margin-top: 1rem;
 }
 
 .card {
   background: var(--surface);
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 8px;
-  transition: transform 0.2s ease, background 0.2s ease;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.2s ease;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
 }
 
 .card:hover {
   transform: translateY(-4px);
   background: #202020;
+}
+
+.card .title {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.card .subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.card .play-btn {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-primary);
+}
+
+.card:hover .play-btn {
+  display: flex;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  background: #282828;
+  color: var(--text-primary);
 }
